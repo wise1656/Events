@@ -1,0 +1,4 @@
+node js
+typescript
+Express - вебсервер
+MongoDb - база
