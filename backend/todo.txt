@@ -1,6 +1,0 @@
-node js
-typescript
-Express - вебсервер
-MongoDb - база
-
-/api/* - путь к запросам api со страницы
