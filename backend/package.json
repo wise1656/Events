@@ -4,7 +4,9 @@
   "description": "",
   "main": "dist/backend/src/app.js",
   "scripts": {
-    "start": "tsc && node dist/backend/src/app.js",
+    "build": "tsc",
+    "start": "node dist/backend/src/app.js",
+    "build&start": "tsc & node dist/backend/src/app.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "keywords": [],
