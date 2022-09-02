@@ -1,7 +1,12 @@
-import { IButton } from './Button.model';
+import { MouseEventHandler, ReactNode } from 'react';
 
-const Button = ({ onClick, children }: IButton) => {
-  return <button onClick={onClick}>{children}</button>;
+interface ButtonProps {
+    onClick: MouseEventHandler<HTMLButtonElement>;
+    children: ReactNode;
+}
+
+const Button = ({ onClick, children }: ButtonProps) => {
+    return <button onClick={onClick}>{children}</button>;
 };
 
 export default Button;
