@@ -16,6 +16,7 @@ export class Server {
         app.listen(port, () => {
             return console.log(`server is listening on ${port}`);
         });
+        app.use(express.static('../frontend/build'));
         Server.instance.app = app;
     }
     
