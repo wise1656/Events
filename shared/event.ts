@@ -1,5 +1,5 @@
 ﻿// мероприятие
-export interface Event {
+export interface EventC {
   _id: string;
   title: string;
   description: string;
@@ -13,7 +13,7 @@ export interface Event {
 
 // расписание мероприятия
 interface ScheduleItem {
-  time: string;
+  time: string; // например '2022-08-11T10:22'
   text: string;
 }
 
