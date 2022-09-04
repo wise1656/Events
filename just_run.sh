@@ -1,2 +1,1 @@
-cd backend
-npm run start &
+ systemctl restart events_server
