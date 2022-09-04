@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
 import { BrowserRouter, Route, Routes } from 'react-router-dom';
 import ReactSwitch from 'react-switch';
+import cn from 'classnames';
 import { useAppDispatch } from 'redux/hooks';
 import { getEvents } from 'redux/events.actions';
 import Events from 'components/Events/Events';
@@ -18,7 +19,7 @@ function App() {
     }, []);
 
     return (
-        <div className={`app${isDarkTheme ? ` app_dark-theme` : ''}`}>
+        <div className={cn('app', { 'app_dark-theme': isDarkTheme })}>
             <header>
                 <div>Dark Mode</div>
                 <ReactSwitch
