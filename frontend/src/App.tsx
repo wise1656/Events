@@ -1,4 +1,4 @@
-import { useEffect, useState, CSSProperties } from 'react';
+import { useEffect, useState } from 'react';
 import { BrowserRouter, Route, Routes } from 'react-router-dom';
 import ReactSwitch from 'react-switch';
 import { useAppDispatch } from 'redux/hooks';
@@ -18,15 +18,7 @@ function App() {
     }, []);
 
     return (
-        <div
-            className='App'
-            style={
-                {
-                    '--color': isDarkTheme ? 'white' : 'black',
-                    '--background': isDarkTheme ? 'black' : 'white',
-                } as CSSProperties
-            }
-        >
+        <div className={`app${isDarkTheme ? ` app_dark-theme` : ''}`}>
             <header>
                 <div>Dark Mode</div>
                 <ReactSwitch
