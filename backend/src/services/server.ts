@@ -1,5 +1,6 @@
 ﻿import express from "express";
 import * as core from "express-serve-static-core";
+import config from '../../config';
 
 export class Server {
     static instance: Server;
@@ -11,7 +12,7 @@ export class Server {
     }
 
     static init() {
-        const port = 3000;
+        const port = config.port;
         const app = express();
         app.listen(port, () => {
             return console.log(`server is listening on ${port}`);

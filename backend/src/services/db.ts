@@ -1,4 +1,5 @@
 ﻿import {MongoClient, Db} from "mongodb";
+import config from '../../config';
 
 export class DataBase {
     private static instance: DataBase;
@@ -9,7 +10,7 @@ export class DataBase {
     }
 
     static async init() {
-        const url = 'mongodb://localhost:27017';
+        const url = config.db;
         const client = new MongoClient(url);
         const dbName = 'Events';
         await client.connect();
