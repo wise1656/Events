@@ -9,7 +9,7 @@ export class UsersAuthRepo {
         let user = await usersAuth.findOne({email});
         if (!user) {
             const {insertedId} = await usersAuth.insertOne({email});
-            user._id = insertedId;
+            user = {_id: insertedId, email};
         }
         return {...user, _id: user._id.toString()} as UserAuth;
     }

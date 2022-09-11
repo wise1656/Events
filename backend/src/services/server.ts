@@ -20,7 +20,7 @@ export class Server {
             return console.log(`server is listening on ${port}`);
         });
         app.use(express.static('../frontend/build'));
-        app.use(express.text());
+        app.use(express.json());
         app.use(cookieParser());
         app.use(cors({origin: "http://localhost:3000", credentials: true}));
 

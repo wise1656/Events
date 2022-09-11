@@ -5,7 +5,7 @@ import hash from "hash-it";
 
 Server.getInstance().regControllers(server => {
     server.post('/api/code', async (req, res) => {
-        const {email} = JSON.parse(req.body);
+        const {email} = req.body;
         const user = await UsersAuthRepo.getUserByEmail(email);
         const code = generateCode();
         user.authCode = code;
@@ -15,7 +15,7 @@ Server.getInstance().regControllers(server => {
     });
 
     server.post('/api/login', async (req, res) => {
-        const {email, code} = JSON.parse(req.body);
+        const {email, code} = req.body;
         const user = await UsersAuthRepo.getUserByEmail(email);
         if (code == user.authCode) {
             const token = generateToken();

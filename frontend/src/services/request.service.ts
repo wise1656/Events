@@ -20,6 +20,9 @@ export class RequestService {
         const response = await fetch(`${this.getServerUrl()}${url}`, {
             method: "POST",
             credentials: "include",
+            headers: {
+                "Content-Type": "application/json"
+            },
             body: JSON.stringify(data)
         });
         return this.processResponse(response);
