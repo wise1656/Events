@@ -2,6 +2,7 @@
 /backend/node_modules/
 /backend/dist/
 /backend/config.ts
+/frontend/src/config/config.ts
 /frontend/.idea/
 
 # dependencies
