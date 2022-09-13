@@ -1,5 +1,6 @@
 import {NextFunction, Request, Response} from "express-serve-static-core";
 import {UserAuth, UsersAuthRepo} from "../repositories/usersAuthRepo";
+import {setTokenCookie} from "../services/server";
 
 // проверяет авторизацию плользователя и добавляет его id в запрос для дальнейших обработчиков
 export default async function (req: Request, res: Response, next: NextFunction) {
@@ -13,6 +14,7 @@ export default async function (req: Request, res: Response, next: NextFunction) 
     }
     else {
         req["userId"] = user._id;
+        setTokenCookie(res, user.token);
         next();
     }
 }

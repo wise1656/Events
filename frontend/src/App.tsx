@@ -1,4 +1,4 @@
-import {memo, useState} from 'react';
+import {memo, useEffect, useState} from 'react';
 import { BrowserRouter, Route, Routes } from 'react-router-dom';
 import ReactSwitch from 'react-switch';
 import cn from 'classnames';
@@ -8,11 +8,22 @@ import './App.scss';
 import { useNavigate } from 'react-router-dom';
 import {RequestService} from "./services/request.service";
 import {Login} from "./components/Login/Login";
+import {WebSocketFrontService} from "./services/web-socket-front.service";
+import {getEvents} from "./redux/events.actions";
+import {useAppDispatch} from "./redux/hooks";
+import {WsKey} from "./shared/ws-protocol";
 
 const DARK_THEME = 'darkTheme';
 
 function App() {
     const [isDarkTheme, setIsDarkTheme] = useState(Number(localStorage.getItem(DARK_THEME)));
+    const dispatch = useAppDispatch();
+
+    useEffect(() => {
+         const wsService = WebSocketFrontService.getInstance();
+         wsService.subscribe(WsKey.events, () => dispatch(getEvents()));
+    }, [])
+
     return (
         <div className={cn('app', { 'app_dark-theme': isDarkTheme })}>
             <header>

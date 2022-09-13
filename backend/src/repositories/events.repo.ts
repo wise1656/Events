@@ -1,6 +1,6 @@
 ﻿import {ObjectId} from "bson";
-import {EventC} from "../../../shared/event";
 import {DataBase} from "../services/db";
+import {EventC} from "../../../frontend/src/shared/event"
 
 export class EventsRepo {
     static async getEvents(): Promise<EventC[]> {

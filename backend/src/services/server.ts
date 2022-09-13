@@ -3,9 +3,10 @@ import * as core from "express-serve-static-core";
 import config from '../../config';
 import cors from "cors";
 import cookieParser from "cookie-parser";
+import {Response} from "express-serve-static-core";
 
 export class Server {
-    static instance: Server;
+    private static instance: Server;
     app: core.Express;
     controllers = [];
 
@@ -14,18 +15,21 @@ export class Server {
     }
 
     static init() {
-        const port = config.port;
         const app = express();
-        app.listen(port, () => {
-            return console.log(`server is listening on ${port}`);
-        });
+
         app.use(express.static('../frontend/build'));
         app.use(express.json());
         app.use(cookieParser());
         app.use(cors({origin: "http://localhost:3000", credentials: true}));
 
         Server.instance.app = app;
-        app.get("/", )
+    }
+
+    listen() {
+        const port = config.port;
+        this.app.listen(port, () => {
+            return console.log(`server is listening on ${port}`);
+        });
     }
 
     regControllers(controller: (server: core.Express) => void) {
@@ -35,4 +39,8 @@ export class Server {
     runControllers() {
         this.controllers.forEach(c => c(this.app));
     }
+}
+
+export const setTokenCookie = (res: Response, token: string) => {
+    res.cookie('token', token, {httpOnly: true, maxAge: 365*24*60*60});
 }

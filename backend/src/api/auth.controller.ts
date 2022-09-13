@@ -1,4 +1,4 @@
-import {Server} from "../services/server";
+import {Server, setTokenCookie} from "../services/server";
 import {MailSender} from "../services/mail-sender";
 import {UsersAuthRepo} from "../repositories/usersAuthRepo";
 import hash from "hash-it";
@@ -18,10 +18,9 @@ Server.getInstance().regControllers(server => {
         const {email, code} = req.body;
         const user = await UsersAuthRepo.getUserByEmail(email);
         if (code == user.authCode) {
-            const token = generateToken();
-            user.token = token;
+            user.token ??= generateToken();
             await UsersAuthRepo.saveUser(user);
-            res.cookie('token', token);
+            setTokenCookie(res, user.token);
         } else {
             res.statusCode = 401;
         }

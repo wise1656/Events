@@ -9,7 +9,7 @@ export class RequestService {
     }
 
     async get<T>(url: string): Promise<T> {
-        const response = await fetch(`${this.getServerUrl()}${url}`, {
+        const response = await fetch(RequestService.getServerUrl(url), {
             method: "GET",
             credentials: "include"
         });
@@ -17,7 +17,7 @@ export class RequestService {
     }
 
     async post<T = void>(url: string, data: Object): Promise<T> {
-        const response = await fetch(`${this.getServerUrl()}${url}`, {
+        const response = await fetch(RequestService.getServerUrl(url), {
             method: "POST",
             credentials: "include",
             headers: {
@@ -42,7 +42,7 @@ export class RequestService {
         return respTxt ? JSON.parse(respTxt) : null;
     }
 
-    private getServerUrl() {
-        return `${window.location.protocol}//${window.location.hostname}:${config.serverPort}`
+    static getServerUrl(url: string) {
+        return `${window.location.protocol}//${window.location.hostname}:${config.serverPort}${url}`
     }
 }

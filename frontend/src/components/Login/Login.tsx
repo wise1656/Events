@@ -26,7 +26,7 @@ export function Login() {
             <div>
                 Введите код с вашей почты:
                 <input value={code} onChange={e => setCode(e.target.value)}/>
-                <button disabled={!codeSent} onClick={login}>Отправить</button>
+                <button onClick={login}>Отправить</button>
             </div>
     </div>
 }
