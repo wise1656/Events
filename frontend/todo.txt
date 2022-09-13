@@ -1,4 +1,0 @@
-react
-typescript
-redux toolkit
-spa

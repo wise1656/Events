@@ -1,7 +1,7 @@
 ﻿import {createAsyncThunk} from "@reduxjs/toolkit";
 import {AppDispatch, RootState} from "./store";
-import {EventC} from "../../../shared/event";
 import {RequestService} from "../services/request.service";
+import {EventC} from "../shared/event";
 
 
 interface ApiConfig {

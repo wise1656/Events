@@ -1,7 +1,7 @@
-﻿import {EventC} from "../../../shared/event";
-import {createSlice, PayloadAction} from "@reduxjs/toolkit";
+﻿import {createSlice, PayloadAction} from "@reduxjs/toolkit";
 import {RootState} from "./store";
 import {getEvents} from "./events.actions";
+import {EventC} from "../shared/event";
 
 interface InitialState {
     events: EventC[]

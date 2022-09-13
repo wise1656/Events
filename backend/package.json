@@ -6,9 +6,7 @@
   "scripts": {
     "build": "tsc",
     "build_watch": "tsc --watch",
-    "startserv": "node dist/backend/src/app.js",
-    "build_start": "tsc & node dist/backend/src/app.js",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "start_serv": "node dist/backend/src/app.js"
   },
   "keywords": [],
   "author": "",
