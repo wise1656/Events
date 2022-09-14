@@ -51,5 +51,5 @@ export class WebSocketFrontService {
 type SubscribeCallback = (id?: string) => void;
 
 function getServerWsUrl() {
-    return `${window.location.protocol == 'http:' ? 'ws:' : 'wss:'}//${window.location.hostname}:${config.serverPort}/ws`
+    return `${window.location.protocol == 'http:' ? 'ws:' : 'wss:'}//${window.location.hostname}${config.serverPort ? ':' + config.serverPort : ''}/ws`
 }

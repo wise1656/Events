@@ -43,6 +43,8 @@ export class RequestService {
     }
 
     static getServerUrl(url: string) {
-        return `${window.location.protocol}//${window.location.hostname}:${config.serverPort}${url}`
+        if (config.serverPort)
+            return `${window.location.protocol}//${window.location.hostname}:${config.serverPort}${url}`
+        return url;
     }
 }
