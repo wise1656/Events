@@ -2,7 +2,7 @@
 import "./api/auth.controller";
 import "./pages/page.controller";
 import {DataBase} from "./services/db";
-import {Server} from "./services/server";
+import {Server} from "./services/server.service";
 import {WebSocketService} from "./services/web-socket.service";
 
 async function run() {

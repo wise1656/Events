@@ -1,5 +1,5 @@
 ﻿import {EventsRepo} from "../repositories/events.repo";
-import {Server} from "../services/server";
+import {Server} from "../services/server.service";
 import authorized from "../middlewares/authorized";
 import {Express} from "express";
 import {Request, Response} from "express-serve-static-core";

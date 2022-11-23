@@ -1,5 +1,6 @@
 import config from "../config/config";
 import {NavigateFunction} from "react-router/lib/hooks";
+import { ChangeLoginStatus } from "pages/Login/login-hook";
 
 export class RequestService {
     private static instance: RequestService;
@@ -35,9 +36,11 @@ export class RequestService {
     private async processResponse(response: Response) {
         if (response.status == 401) { // unauthorized
             this.navigate?.("/login");
+            ChangeLoginStatus(false);
             return null;
         }
 
+        ChangeLoginStatus(true);
         const respTxt = await response.text();
         return respTxt ? JSON.parse(respTxt) : null;
     }

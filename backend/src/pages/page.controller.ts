@@ -1,4 +1,4 @@
-﻿import {Server} from "../services/server";
+﻿import {Server} from "../services/server.service";
 
 // контроллер возвращает страницу по любому адресу не начинающемуся с /api/
 Server.getInstance().regControllers(server => {

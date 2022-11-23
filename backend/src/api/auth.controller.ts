@@ -1,7 +1,8 @@
-import {Server, setTokenCookie} from "../services/server";
+import {Server, setTokenCookie} from "../services/server.service";
 import {MailSender} from "../services/mail-sender";
 import {UsersAuthRepo} from "../repositories/usersAuthRepo";
 import hash from "hash-it";
+import authorized from "../middlewares/authorized";
 
 Server.getInstance().regControllers(server => {
     server.post('/api/code', async (req, res) => {
@@ -26,6 +27,11 @@ Server.getInstance().regControllers(server => {
         }
         res.send();
     });
+
+    // контроллер нужен только для проверки залогинен ли пользователь
+    server.post('/api/checklogin', authorized, async (req, res) => {
+        res.send();
+    })
 });
 
 function generateCode() {

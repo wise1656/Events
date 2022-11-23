@@ -1,6 +1,6 @@
 import WebSocket from "ws";
 import {UsersAuthRepo} from "../repositories/usersAuthRepo";
-import {Server} from "./server";
+import {Server} from "./server.service";
 import expressWs from "express-ws";
 import {UpdateData, WsKey} from "../../../frontend/src/shared/ws-protocol";
 

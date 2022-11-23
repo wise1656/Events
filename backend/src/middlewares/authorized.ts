@@ -1,8 +1,8 @@
 import {NextFunction, Request, Response} from "express-serve-static-core";
 import {UserAuth, UsersAuthRepo} from "../repositories/usersAuthRepo";
-import {setTokenCookie} from "../services/server";
+import {setTokenCookie} from "../services/server.service";
 
-// проверяет авторизацию плользователя и добавляет его id в запрос для дальнейших обработчиков
+// проверяет авторизацию пользователя и добавляет его id в запрос для дальнейших обработчиков
 export default async function (req: Request, res: Response, next: NextFunction) {
     const token = req.cookies["token"];
     let user: UserAuth;

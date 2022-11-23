@@ -42,5 +42,5 @@ export class Server {
 }
 
 export const setTokenCookie = (res: Response, token: string) => {
-    res.cookie('token', token, {httpOnly: true, maxAge: 365*24*60*60});
+    res.cookie('token', token, {httpOnly: true, maxAge: 365*24*60*60 /* year */});
 }

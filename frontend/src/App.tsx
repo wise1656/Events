@@ -1,62 +1,18 @@
-import {memo, useEffect, useState} from 'react';
-import { BrowserRouter, Route, Routes } from 'react-router-dom';
-import ReactSwitch from 'react-switch';
-import cn from 'classnames';
-import Events from 'components/Events/Events';
-import Empty from 'components/Empty/Empty';
 import './App.scss';
-import { useNavigate } from 'react-router-dom';
-import {RequestService} from "./services/request.service";
-import {Login} from "./components/Login/Login";
-import {WebSocketFrontService} from "./services/web-socket-front.service";
-import {getEvents} from "./redux/events.actions";
-import {useAppDispatch} from "./redux/hooks";
-import {WsKey} from "./shared/ws-protocol";
-
-const DARK_THEME = 'darkTheme';
+import { CheckLoginHook as useCheckLogin } from 'pages/Login/login-hook';
+import { LinearProgress } from '@mui/material';
+import { LoggedInApp } from 'LoggedInApp';
+import { Login } from 'pages/Login/Login';
 
 function App() {
-    const [isDarkTheme, setIsDarkTheme] = useState(Number(localStorage.getItem(DARK_THEME)));
-    const dispatch = useAppDispatch();
+    const isLoggedIn = useCheckLogin();
 
-    useEffect(() => {
-         const wsService = WebSocketFrontService.getInstance();
-         wsService.subscribe(WsKey.events, () => dispatch(getEvents()));
-    }, [])
-
-    return (
-        <div className={cn('app', { 'app_dark-theme': isDarkTheme })}>
-            <header>
-                <div>Dark Mode</div>
-                <ReactSwitch
-                    checked={Boolean(isDarkTheme)}
-                    onChange={() => {
-                        if (isDarkTheme) {
-                            localStorage.removeItem(DARK_THEME);
-                        } else {
-                            localStorage.setItem(DARK_THEME, '1');
-                        }
-                        setIsDarkTheme(isDarkTheme ? 0 : 1);
-                    }}
-                />
-            </header>
-            <BrowserRouter>
-                <InitRequestService/>
-                <Routes>
-                    <Route index element={<Events />} />
-                    <Route path='login' element={<Login/>} />
-                    <Route path='empty' element={<Empty />} />
-                    <Route path='*' element={'404. Not Found!'} />
-                </Routes>
-            </BrowserRouter>
-        </div>
-    );
+    if (isLoggedIn == null)
+        return <LinearProgress />;
+    else if (!isLoggedIn)
+        return <Login />;
+    else
+        return <LoggedInApp />;
 }
-
-const InitRequestService = memo(() => {
-    const navigate = useNavigate();
-    RequestService.getInstance().setNavigate(navigate);
-    return null;
-});
 
 export default App;
