@@ -5,7 +5,7 @@ import {useEffect} from "react";
 import {getEvents} from "../../redux/events.actions";
 import {useAppDispatch} from "../../redux/hooks";
 
-export default function Events() {
+export function EventList() {
     const events = useSelector(selectEvents);
     const dispatch = useAppDispatch();
 
@@ -15,7 +15,7 @@ export default function Events() {
 
     return (
         <div>
-            {events.map((e, i) => (
+            {events?.map((e, i) => (
                 <div key={i}>{e.title}</div>
             ))}
             <div>

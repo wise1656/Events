@@ -1,6 +1,6 @@
 import { Link } from 'react-router-dom';
 
-const Empty = () => {
+export const Event = () => {
     return (
         <div>
             <div>Empty</div>
@@ -9,4 +9,3 @@ const Empty = () => {
     );
 };
 
-export default Empty;
