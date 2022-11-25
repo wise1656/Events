@@ -1,5 +1,5 @@
 import { useEffect } from 'react';
-import { BrowserRouter, Route, Routes, useNavigate } from 'react-router-dom';
+import { BrowserRouter, matchRoutes, Route, Routes, useNavigate } from 'react-router-dom';
 import { getEvents } from 'redux/events.actions';
 import { useAppDispatch } from 'redux/hooks';
 import { RequestService } from 'services/request.service';
@@ -17,14 +17,18 @@ const AppContainer = styled('div')({
 
 export default function App() {
     useEventsAutoUpdate();
+    const dispatch = useAppDispatch();
 
+    useEffect(() => {
+        dispatch(getEvents());
+    }, []);
+    
     return (
         <BrowserRouter>
-            <InitRequestService />
             <AppContainer>
                 <Routes>
                     {RoutesData.map((r) => (
-                        <Route path={r.url} element={<r.component />} />
+                        <Route key={r.url} path={r.url + '/*'} element={<r.component />} />
                     ))}
                     <Route path='*' element={<h1>404. Not Found!</h1>} />
                 </Routes>
@@ -40,16 +44,4 @@ function useEventsAutoUpdate() {
         const wsService = WebSocketFrontService.getInstance();
         wsService.subscribe(WsKey.events, () => dispatch(getEvents()));
     }, []);
-}
-
-function InitRequestService() {
-    const navigate = useNavigate();
-    useEffect(() => {
-        RequestService.getInstance().setNavigate(navigate);
-    }, [navigate]);
-    return null;
-}
-
-function Header() {
-    return <div></div>;
 }

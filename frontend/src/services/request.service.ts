@@ -1,9 +1,7 @@
 import config from "../config/config";
-import {NavigateFunction} from "react-router/lib/hooks";
 
 export class RequestService {
     private static instance: RequestService;
-    private navigate?: NavigateFunction;
     static getInstance() {
         return RequestService.instance ??= new RequestService();
     }
@@ -26,10 +24,6 @@ export class RequestService {
             body: JSON.stringify(data)
         });
         return this.processResponse(response);
-    }
-
-    setNavigate(navigate: NavigateFunction) {
-        this.navigate = navigate;
     }
 
     private async processResponse(response: Response) {

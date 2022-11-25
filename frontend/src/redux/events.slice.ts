@@ -30,5 +30,6 @@ const eventsSlice = createSlice({
 export const { setEvents } = eventsSlice.actions;
 
 export const selectEvents = (state: RootState) => state.events.events;
+export const selectEvent = (id: string) => (state: RootState) => state.events.events.find(e => e._id == id);
 
 export default eventsSlice.reducer;

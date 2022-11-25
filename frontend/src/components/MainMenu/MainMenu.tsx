@@ -1,5 +1,5 @@
 import { BottomNavigation, BottomNavigationAction, styled, Paper } from '@mui/material';
-import { useLocation, useNavigate } from 'react-router-dom';
+import { matchPath, useLocation, useNavigate } from 'react-router-dom';
 import { RoutesData } from 'components/Routes/routes';
 import { useScreenWidthLessThen } from 'helpers/useScreenSize';
 
@@ -32,12 +32,12 @@ export function MainMenu() {
     return (
         <MenuContainer>
             <BottomMenu
-                value={RoutesData.findIndex((r) => r.url == location.pathname)}
+                value={RoutesData.findIndex((r) => location.pathname.startsWith(r.url))}
                 onChange={(_e, val) => navigate(RoutesData[val]?.url)}
                 showLabels={!isSmallScreen}
             >
                 {RoutesData.map((route) => (
-                    <BottomMenuItem label={route.menuTitle} icon={route.menuIcon} />
+                    <BottomMenuItem key={route.url} label={route.menuTitle} icon={route.menuIcon} />
                 ))}
             </BottomMenu>
         </MenuContainer>

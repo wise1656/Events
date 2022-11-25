@@ -1,16 +1,15 @@
-﻿import {EventsRepo} from "../repositories/events.repo";
-import {Server} from "../services/server.service";
-import authorized from "../middlewares/authorized";
-import {Express} from "express";
-import {Request, Response} from "express-serve-static-core";
-import {WebSocketService} from "../services/web-socket.service";
-import {EventC} from "../../../frontend/src/shared/event"
-import {WsKey} from "../../../frontend/src/shared/ws-protocol"
+﻿import { EventsRepo } from '../repositories/events.repo';
+import { Server } from '../services/server.service';
+import authorized from '../middlewares/authorized';
+import { Express } from 'express';
+import { Request, Response } from 'express-serve-static-core';
+import { WebSocketService } from '../services/web-socket.service';
+import { EventC } from '../../../frontend/src/shared/event';
+import { WsKey } from '../../../frontend/src/shared/ws-protocol';
 
 Server.getInstance().regControllers((server: Express) => {
-
     // получает список всех мероприятий
-    server.get('/api/events', authorized, async (req: Request, res: Response) => {
+    server.get('/api/events', async (req: Request, res: Response) => {
         const events = await EventsRepo.getEvents();
         res.send(events);
     });
@@ -20,5 +19,5 @@ Server.getInstance().regControllers((server: Express) => {
         await EventsRepo.saveEvent(event);
         WebSocketService.getInstance().sendToAll(WsKey.events);
         res.send();
-    })
+    });
 });
