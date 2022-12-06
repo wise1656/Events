@@ -1,15 +1,14 @@
 import { extractUserInfo, isUserInfo, UserService } from 'services/User.service';
 import { useSubscribeMutation } from 'redux/ApiQuery';
+import { useCallback } from 'react';
 
 // создает функцию подписки на мероприятие, которая отправляет запрос с данными юзера
-export function useSubscribe(showUserInfo: boolean, eventId: string) {
+export function useSubscribe(eventId: string) {
     const [callSubscribe] = useSubscribeMutation();
 
-    const subscribe = (data) => {
+    const subscribe = useCallback((data) => {
         let subscription = data;
-        if (showUserInfo) {
-            if (!isUserInfo(data))
-                console.error("Wrong UserInfo fields", data);
+        if (isUserInfo(data)) {
             const userInfo = extractUserInfo(data);
             UserService.getInstance().saveUserInfo(userInfo);
         }
@@ -20,7 +19,7 @@ export function useSubscribe(showUserInfo: boolean, eventId: string) {
         subscription["eventId"] = eventId;
 
         return callSubscribe(subscription).unwrap()
-    };
+    }, [eventId]);
 
     return subscribe;
 }
