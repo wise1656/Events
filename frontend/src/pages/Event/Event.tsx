@@ -7,6 +7,7 @@ import { Navigate, useLocation, useNavigate, useParams } from 'react-router-dom'
 import { MainButton } from '../../components/Button/Button';
 import { useAppDispatch } from 'redux/store';
 import { selectCurrentEventId, setCurrentEvent } from 'redux/UiSlice';
+import { LongDateFormat, TimeFormat, WeekdayFormat } from 'helpers/DateFormat';
 
 export function Event() {
     const event = useGetCurrentEvent();
@@ -18,7 +19,7 @@ export function Event() {
         <Stack spacing={1}>
             <h1>{event.title}</h1>
             <Box>{event.description}</Box>
-            <Box>Начало в {event.startDate}</Box>
+            <Box>Начало {LongDateFormat(event.startDate)} ({WeekdayFormat(event.startDate)}) в {TimeFormat(event.startDate)}</Box>
             <Stack direction='row'>
                 <MainButton onClick={() => setShowRegistration(true)}>Буду участвовать</MainButton>
             </Stack>
