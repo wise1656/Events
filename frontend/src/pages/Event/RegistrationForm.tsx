@@ -1,5 +1,4 @@
 import {
-    Button,
     Checkbox,
     FormControlLabel,
     Paper,
@@ -12,42 +11,49 @@ import {
 } from '@mui/material';
 import { RegistrationField } from 'shared/event';
 import { Controller, FieldValues, useForm, UseFormRegister } from 'react-hook-form';
-import { useEffect, useState } from 'react';
+import { useLayoutEffect, useState } from 'react';
 import { shallowEqual } from 'react-redux';
+import { ButtonsContainer } from '../../components/Button/ButtonsContainer';
+import { UserInfo, UserService } from 'services/User.service';
+import { UserDataFields } from 'components/UserDataFields';
+import { useSubscribe } from './useSubscribe';
+import { MainButton, SecondaryButton } from 'components/Button/Button';
 
 interface RegistrationFormProps {
-    info: RegistrationField[];
-    onClose: () => void;
+    fields: RegistrationField[]
+    eventId: string
+    onClose: () => void
 }
 
-export function RegistrationForm({ info, onClose }: RegistrationFormProps) {
-    const { register, handleSubmit, reset, control, watch } = useForm();
-    const [hiddenFields, setHiddenFields] = useState(calcHiddenFields(info));
+export function RegistrationForm({ fields, eventId, onClose }: RegistrationFormProps) {
+    const { register, handleSubmit, reset, control, watch } = useForm<UserInfo | any>();
+    const [hiddenFields, setHiddenFields] = useState([]);
+    // TODO: избавиться от прямого использования getUserInfo, сохранять данные в редакс, иначе слишком часто дергается localStorage
+    const [showUserInfo] = useState(UserService.getInstance().getUserInfo() == null);
+    const subscribe = useSubscribe(showUserInfo, eventId);
 
-    useEffect(() => {
+    useLayoutEffect(() => {
+        setHiddenFields(calcHiddenFields(fields))
         const subscr = watch((formValue) => {
-            const hideFields = calcHiddenFields(info, formValue);
+            const hideFields = calcHiddenFields(fields, formValue);
             setHiddenFields((oldHide) =>
                 shallowEqual(hideFields, oldHide) ? oldHide : hideFields,
             );
         });
         return () => subscr.unsubscribe();
-    }, [info]);
+    }, [fields]);
 
     const close = () => {
         reset();
         onClose();
     };
 
-    const subscribe = (data) => {
-        console.log(data);
-    };
-
     return (
-        <form onSubmit={handleSubmit(subscribe)}>
-            <Paper sx={{ padding: 1 }} elevation={3}>
-                <Stack spacing={1}>
-                    {info.map((field) => {
+        <form onSubmit={handleSubmit((data) => subscribe(data).then(close))}>
+            <Paper sx={{ padding: 2 }} elevation={3}>
+                <Stack spacing={2}>
+                    {showUserInfo && <UserDataFields register={register}/>}
+                    {fields.map((field) => {
                         if (hiddenFields.includes(field.id)) return null;
                         if (field.type == 'text') return createTextInput(field, register);
                         if (field.type == 'checkbox') return createCheckboxInput(field, control);
@@ -55,12 +61,12 @@ export function RegistrationForm({ info, onClose }: RegistrationFormProps) {
                             return createSelect(field, control, field.type);
                     })}
                     <ButtonsContainer>
-                        <Button type='submit' variant='contained'>
+                        <MainButton type='submit'>
                             Ок
-                        </Button>
-                        <Button type='button' variant='outlined' onClick={close}>
+                        </MainButton>
+                        <SecondaryButton onClick={close}>
                             Отмена
-                        </Button>
+                        </SecondaryButton>
                     </ButtonsContainer>
                 </Stack>
             </Paper>
@@ -86,14 +92,6 @@ function calcHiddenFields(info: RegistrationField[], formValue?) {
     });
 }
 
-function ButtonsContainer(props) {
-    return (
-        <Stack direction='row' spacing={2} justifyContent='center' sx={{ paddingTop: 1 }}>
-            {props.children}
-        </Stack>
-    );
-}
-
 function createTextInput(
     field: RegistrationField,
     register: UseFormRegister<FieldValues>,
@@ -113,12 +111,12 @@ function createCheckboxInput(field: RegistrationField, control): JSX.Element {
     return (
         <FormControlLabel
             key={field.id}
-            label={field.name}
+            label={field.name}      
             control={
                 <Controller
                     name={field.id}
                     control={control}
-                    render={({ field }) => <Checkbox {...field} checked={!!field.value} />}
+                    render={({ field }) => <Checkbox {...field} size='small' checked={!!field.value}/>}
                 />
             }
         />
@@ -127,8 +125,8 @@ function createCheckboxInput(field: RegistrationField, control): JSX.Element {
 
 function createSelect(field: RegistrationField, control, options: string[]): JSX.Element {
     return (
-        <FormControl key={field.id} size='small'>
-            <InputLabel>{field.name}</InputLabel>
+        <FormControl key={field.id}>
+            <InputLabel variant="standard">{field.name}</InputLabel>
             <Controller
                 name={field.id}
                 control={control}
@@ -138,6 +136,7 @@ function createSelect(field: RegistrationField, control, options: string[]): JSX
                         label={field.name}
                         value={rend.field.value || ''}
                         size='small'
+                        variant='standard'
                     >
                         <MenuItem value={''} disabled></MenuItem>
                         {options.map((t) => (

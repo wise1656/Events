@@ -8,14 +8,16 @@ import Diversity1Icon from '@mui/icons-material/Diversity1';
 import ViewTimelineIcon from '@mui/icons-material/ViewTimeline';
 import CommentIcon from '@mui/icons-material/Comment';
 import PersonIcon from '@mui/icons-material/Person';
-
 import { ReactElement } from 'react';
+import { selectCurrentEventId } from 'redux/UiSlice';
+import { store } from 'redux/store';
 
 interface RouteData {
     url: string;
     component: () => ReactElement;
     menuIcon: ReactElement;
     menuTitle: string;
+    isDisabled?: () => boolean;
 }
 
 export const RoutesData: RouteData[] = [
@@ -30,19 +32,20 @@ export const RoutesData: RouteData[] = [
         component: () => <Event />,
         menuIcon: <Diversity1Icon />,
         menuTitle: 'Событие',
+        isDisabled: () => selectCurrentEventId(store.getState()) == null        
     },
-    {
-        url: '/timetable',
-        component: () => <Timetable />,
-        menuIcon: <ViewTimelineIcon />,
-        menuTitle: 'Расписание',
-    },
-    {
-        url: '/messages',
-        component: () => <Messages />,
-        menuIcon: <CommentIcon />,
-        menuTitle: 'Сообщения',
-    },
+    // {
+    //     url: '/timetable',
+    //     component: () => <Timetable />,
+    //     menuIcon: <ViewTimelineIcon />,
+    //     menuTitle: 'Расписание',
+    // },
+    // {
+    //     url: '/messages',
+    //     component: () => <Messages />,
+    //     menuIcon: <CommentIcon />,
+    //     menuTitle: 'Сообщения',
+    // },
     {
         url: '/userinfo',
         component: () => <Profile />,

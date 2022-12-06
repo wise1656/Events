@@ -11,6 +11,14 @@ export class EventsRepo {
             .toArray()
     }
 
+    static async getEvent(id: string): Promise<EventC> {
+        const {db} = DataBase.getInstance();
+        const event = await db.collection("Events").findOne({_id: new ObjectId(id)});
+        if (event)
+            return {...event, _id: event._id.toString()} as EventC;
+        return null;
+    }
+
     static async saveEvent(event: EventC) {
         const dbEvent = ({...event, _id: new ObjectId(event._id)});
         const {db} = DataBase.getInstance();

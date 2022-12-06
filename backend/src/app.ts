@@ -1,5 +1,6 @@
 ﻿import "./api/events.controller";
 import "./api/auth.controller";
+import "./api/subscription.controller";
 import "./pages/page.controller";
 import {DataBase} from "./services/db";
 import {Server} from "./services/server.service";

@@ -29,7 +29,7 @@ export class UsersAuthRepo {
 
 }
 
-// ToDo: сделать время жизни ключа и токена
+// TODO: сделать время жизни ключа и токена
 export interface UserAuth {
     _id: string
     email: string

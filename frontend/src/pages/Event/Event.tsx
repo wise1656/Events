@@ -1,14 +1,17 @@
-import { useState } from 'react';
-import { Box, Button, FormControl, Stack } from '@mui/material';
+import { useEffect, useState } from 'react';
+import { Box, Stack } from '@mui/material';
 import { useSelector } from 'react-redux';
-import { selectEvent } from 'redux/events.slice';
 import { RegistrationForm } from './RegistrationForm';
+import { selectEvent } from 'redux/ApiQuery';
+import { Navigate, useLocation, useNavigate, useParams } from 'react-router-dom';
+import { MainButton } from '../../components/Button/Button';
+import { useAppDispatch } from 'redux/store';
+import { selectCurrentEventId, setCurrentEvent } from 'redux/UiSlice';
 
 export function Event() {
-    const eventId = window.location.pathname.split('/').at(-1);
-    const event = useSelector(selectEvent(eventId));
+    const event = useGetCurrentEvent();
     const [showRegistration, setShowRegistration] = useState(false);
-
+    
     if (!event) return null;
 
     return (
@@ -17,20 +20,34 @@ export function Event() {
             <Box>{event.description}</Box>
             <Box>Начало в {event.startDate}</Box>
             <Stack direction='row'>
-                <Button
-                    color='primary'
-                    variant='contained'
-                    onClick={() => setShowRegistration(true)}
-                >
-                    Буду участвовать
-                </Button>
+                <MainButton onClick={() => setShowRegistration(true)}>Буду участвовать</MainButton>
             </Stack>
             {showRegistration && (
                 <RegistrationForm
-                    info={event.registrationInfo}
+                    fields={event.registrationInfo}
+                    eventId={event._id}
                     onClose={() => setShowRegistration(false)}
                 />
             )}
         </Stack>
     );
 }
+
+// загружает эвент по урлу или последний открытый эвент
+function useGetCurrentEvent() {
+    const eventId = useLocation().pathname.split('/')[2];
+        const storedEventId = useSelector(selectCurrentEventId);
+        const event = useSelector(selectEvent(eventId));
+        const navigate = useNavigate();
+        const dispatch = useAppDispatch();
+    
+        useEffect(() => {
+            if (event)
+                dispatch(setCurrentEvent(eventId));    
+            else    
+                navigate(storedEventId ? `/event/${storedEventId}` : '/eventlist');
+        }, [event, eventId])
+    
+        return event;
+    }
+        
