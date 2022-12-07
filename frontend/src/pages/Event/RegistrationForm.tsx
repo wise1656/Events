@@ -29,7 +29,6 @@ export function RegistrationForm({ fields, eventId, onClose }: RegistrationFormP
     const formProcessor = useForm<UserInfo & FieldValues>();
     const { register, handleSubmit, reset, control, watch } = formProcessor;
     const [hiddenFields, setHiddenFields] = useState([]);
-    // TODO: избавиться от прямого использования getUserInfo, сохранять данные в редакс, иначе слишком часто дергается localStorage
     const submitSubscription = useSubscribe(eventId);
 
     useLayoutEffect(() => {

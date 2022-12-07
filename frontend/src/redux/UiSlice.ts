@@ -21,4 +21,4 @@ export const uiSlice = createSlice({
 export const { setCurrentEvent } = uiSlice.actions;
 
 // Selectors
-export const selectCurrentEventId = (state: RootState) => state.uiSlice.currentEventId;
+export const selectCurrentEventId = (state: RootState) => state.ui.currentEventId;

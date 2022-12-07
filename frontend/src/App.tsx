@@ -7,6 +7,8 @@ import { RoutesData } from 'components/Routes/routes';
 import { styled } from '@mui/material';
 import { mainApi } from 'redux/ApiQuery';
 import { useAppDispatch } from 'redux/store';
+import { setSubscribedEvents } from 'redux/subscriptions.slice';
+import { SubscriptionsService } from 'services/Subscriptions.service';
 
 const AppContainer = styled('div')({
     maxWidth: 600,
@@ -48,5 +50,6 @@ function useEventsAutoUpdate() {
 function useInitialLoadData() {
     const dispatch = useAppDispatch();
     getEventsFetcher = dispatch(mainApi.endpoints.getEvents.initiate());
+    dispatch(setSubscribedEvents(SubscriptionsService.getInstance().getSubscriptions()));
 }
 

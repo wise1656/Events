@@ -3,11 +3,13 @@ import { TypedUseSelectorHook, useDispatch, useSelector } from 'react-redux';
 import { mainApi } from './ApiQuery';
 import { uiSlice } from './UiSlice';
 import userInfo from './UserInfo.slice';
+import subscriptions from './subscriptions.slice';
 
 export const store = configureStore({
     reducer: {
-        uiSlice: uiSlice.reducer,
+        ui: uiSlice.reducer,
         userInfo,
+        subscriptions,
         [mainApi.reducerPath]: mainApi.reducer
     },
     middleware: (getDefaultMiddleware) => getDefaultMiddleware().concat(mainApi.middleware)

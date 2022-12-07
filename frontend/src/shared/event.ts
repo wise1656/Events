@@ -3,12 +3,10 @@ export interface EventC {
     _id: string;
     title: string;
     description: string;
-    image: string;
-    placeCoordinates: string;
     startDate: string;
+    endDate?: string;
     schedule: ScheduleItem[];
     registrationInfo: RegistrationField[];
-    isPublic: boolean;
 }
 
 // расписание мероприятия

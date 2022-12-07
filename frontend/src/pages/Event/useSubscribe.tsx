@@ -1,12 +1,16 @@
 import { extractUserInfo, isUserInfo, UserService } from 'services/User.service';
 import { useSubscribeMutation } from 'redux/ApiQuery';
 import { useCallback } from 'react';
+import { SubscriptionsService } from 'services/Subscriptions.service';
+import { addSubscribedEvent } from 'redux/subscriptions.slice';
+import { useAppDispatch } from 'redux/store';
 
 // создает функцию подписки на мероприятие, которая отправляет запрос с данными юзера
 export function useSubscribe(eventId: string) {
     const [callSubscribe] = useSubscribeMutation();
+    const dispatch = useAppDispatch();
 
-    const subscribe = useCallback((data) => {
+    const subscribe = useCallback(async (data) => {
         let subscription = data;
         if (isUserInfo(data)) {
             const userInfo = extractUserInfo(data);
@@ -18,7 +22,10 @@ export function useSubscribe(eventId: string) {
         }
         subscription["eventId"] = eventId;
 
-        return callSubscribe(subscription).unwrap()
+        await callSubscribe(subscription).unwrap()
+
+        SubscriptionsService.getInstance().subscribeTo(eventId);
+        dispatch(addSubscribedEvent(eventId));
     }, [eventId]);
 
     return subscribe;
