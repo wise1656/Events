@@ -9,6 +9,7 @@ import { useAppDispatch } from 'redux/store';
 import { selectCurrentEventId, setCurrentEvent } from 'redux/UiSlice';
 import { LongDateFormat, TimeFormat, WeekdayFormat } from 'helpers/DateFormat';
 import { selectIsSubscribed } from 'redux/subscriptions.slice';
+import { SubscribedTextColor } from 'helpers/Constants';
 
 export function Event() {
     const event = useGetCurrentEvent();
@@ -35,7 +36,7 @@ export function Event() {
             </Box>
             <Stack direction='row'>
                 {isSubscribed ? (
-                    <Typography color='#0099f8'>Вы записаны как участник</Typography>
+                    <Typography color={SubscribedTextColor}>Вы записаны как участник</Typography>
                 ) : (
                     <MainButton onClick={() => setShowRegistration(true)}>
                         Буду участвовать

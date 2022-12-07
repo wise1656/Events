@@ -1,0 +1,1 @@
+export const SubscribedTextColor = '#0099f8';
