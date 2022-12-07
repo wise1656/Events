@@ -25,10 +25,10 @@ export function Profile() {
     };
 
     return (
-        <Box sx={{p: 3}}>
+        <Box sx={{p: 2}}>
             {userInfo && !edit && (
                 <Stack spacing={2} direction='column' alignItems='baseline'>
-                    <Stack direction='row' sx={{mt: 2}} alignItems="center">
+                    <Stack direction='row' alignItems="center">
                         <Typography variant='h5'>
                             {userInfo.name} {userInfo.lastName}
                         </Typography>

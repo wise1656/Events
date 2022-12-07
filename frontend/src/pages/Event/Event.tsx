@@ -19,21 +19,21 @@ export function Event() {
     if (!event) return null;
 
     return (
-        <Stack spacing={2} sx={{ pt: 2 }}>
-            <Typography variant='h4'>{event.title}</Typography>
-            <Box>{event.description}</Box>
+        <Stack spacing={2}>
             <Box>
-                <p>
+                <Typography variant='h4'>{event.title}</Typography>
+                <Typography variant='body2'>
                     Начало {LongDateFormat(event.startDate)} ({WeekdayFormat(event.startDate)}) в{' '}
                     {TimeFormat(event.startDate)}
-                </p>
+                </Typography>
                 {event.endDate && (
-                    <p>
+                    <Typography variant='body2'>
                         Окончание {LongDateFormat(event.endDate)} ({WeekdayFormat(event.endDate)}) в{' '}
                         {TimeFormat(event.endDate)}
-                    </p>
+                    </Typography>
                 )}
             </Box>
+            <Typography variant='body1'>{event.description}</Typography>
             <Stack direction='row'>
                 {isSubscribed ? (
                     <Typography color={SubscribedTextColor}>Вы записаны как участник</Typography>

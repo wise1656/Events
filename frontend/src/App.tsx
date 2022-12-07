@@ -12,7 +12,7 @@ import { SubscriptionsService } from 'services/Subscriptions.service';
 
 const AppContainer = styled('div')({
     maxWidth: 600,
-    padding: '0 15px',
+    padding: '15px',
     margin: 'auto'
 });
 
