@@ -51,6 +51,7 @@ export function Profile() {
     );
 }
 
+
 interface EditProps {
     userInfo: UserInfo;
     onSave: (info: UserInfo) => void;
@@ -58,10 +59,7 @@ interface EditProps {
 }
 
 function Edit({ userInfo, onSave, onCancel }: EditProps) {
-    const { register, reset, handleSubmit } = useForm<UserInfo>();
-    useEffect(() => {
-        reset(userInfo);
-    }, [userInfo]);
+    const { register, handleSubmit } = useForm<UserInfo>({defaultValues: userInfo});
 
     const onSubmit = (data) => {
         if (isUserInfo(data)) onSave(data);

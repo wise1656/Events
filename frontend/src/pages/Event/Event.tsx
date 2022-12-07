@@ -62,9 +62,9 @@ function useGetCurrentEvent() {
     const dispatch = useAppDispatch();
 
     useEffect(() => {
-        if (event) dispatch(setCurrentEvent(eventId));
+        if (eventId) dispatch(setCurrentEvent(eventId));
         else navigate(storedEventId ? `/event/${storedEventId}` : '/eventlist');
-    }, [event, eventId]);
+    }, [eventId]);
 
     return event;
 }
