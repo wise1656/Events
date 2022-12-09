@@ -3,10 +3,12 @@ import { RootState } from "./store";
 
 interface UiState {
     currentEventId: string
+    IsLogin: boolean
 }
 
 const initialState: UiState = {
-    currentEventId: null
+    currentEventId: null,
+    IsLogin: false
 }
 
 export const uiSlice = createSlice({
@@ -14,11 +16,14 @@ export const uiSlice = createSlice({
     initialState,
     reducers: {
         setCurrentEvent: (state: UiState, {payload: currentEventId}: PayloadAction<string>) => 
-            ({...state, currentEventId})        
+            ({...state, currentEventId}),
+        setIsLogin: (state: UiState, {payload: IsLogin}: PayloadAction<boolean>) => 
+            ({...state, IsLogin})        
     }
 });
 
-export const { setCurrentEvent } = uiSlice.actions;
+export const { setCurrentEvent, setIsLogin } = uiSlice.actions;
 
 // Selectors
 export const selectCurrentEventId = (state: RootState) => state.ui.currentEventId;
+export const selectIsLogin = (state: RootState) => state.ui.IsLogin;

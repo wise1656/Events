@@ -18,5 +18,6 @@ export function UserDataFields({ register }: { register: UseFormRegister<UserInf
             }} />
         <TextField {...register('city')} label='Город' variant='standard' required />
         <TextField {...register('church')} label='Церковь' variant='standard' />
+        <TextField {...register('phone')} label='Телефон' variant='standard' required/>
     </>;
 }

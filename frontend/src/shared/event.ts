@@ -15,6 +15,7 @@ interface ScheduleItem {
     text: string;
 }
 
+// TODO: поменять формат всех комментариев на jsdoc
 // описание полей заполняемых при регистрации
 export interface RegistrationField {
     id: string;

@@ -3,7 +3,7 @@ import { FieldValues, UseFormReturn } from 'react-hook-form';
 import { memo, useState } from 'react';
 import { UserInfo, UserService } from 'services/User.service';
 import { UserDataFields } from 'components/UserDataFields';
-import EditIcon from '@mui/icons-material/Edit';
+import { EditIconButton } from 'components/EditIconButton';
 
 // выводит либо имя регистрирующегося юзера либо список полей для ввода инфы о нем
 export const UserInfoInRegistration = memo(({ formProcessor }: { formProcessor: UseFormReturn<UserInfo & FieldValues, any>; }) => {
@@ -18,7 +18,7 @@ export const UserInfoInRegistration = memo(({ formProcessor }: { formProcessor: 
     return userInfo ? (
         <Stack direction='row' alignItems="center">
             {userInfo.name} {userInfo.lastName}
-            <EditIcon onClick={edit} color='action' sx={{ ml: 1, cursor: 'pointer', fontSize: '18px' }} />
+            <EditIconButton onClick={edit} size={18} />
         </Stack>
     ) : (
         <UserDataFields register={register} />

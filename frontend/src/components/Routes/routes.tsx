@@ -20,6 +20,7 @@ interface RouteData {
     isDisabled?: () => boolean;
 }
 
+// TODO: встроить это непосредственно в роутер и меню, облегчения от такой реализации нет, а проблемы есть
 export const RoutesData: RouteData[] = [
     {
         url: '/eventlist',

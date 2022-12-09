@@ -1,4 +1,4 @@
-import {Server, setTokenCookie} from "../services/server.service";
+import {Server} from "../services/server.service";
 import {MailSender} from "../services/mail-sender";
 import {UsersAuthRepo} from "../repositories/usersAuthRepo";
 import hash from "hash-it";
@@ -21,11 +21,10 @@ Server.getInstance().regControllers(server => {
         if (code == user.authCode) {
             user.token ??= generateToken();
             await UsersAuthRepo.saveUser(user);
-            setTokenCookie(res, user.token);
         } else {
             res.statusCode = 401;
         }
-        res.send();
+        res.send(user.token && {token: user.token});
     });
 
     // контроллер нужен только для проверки залогинен ли пользователь

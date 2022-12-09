@@ -27,6 +27,7 @@ export type  UserInfo = {
     birthday: string
     city: string
     church?: string
+    phone: string
 }
 
 export function isUserInfo(userInfo: any): userInfo is UserInfo {
@@ -35,9 +36,10 @@ export function isUserInfo(userInfo: any): userInfo is UserInfo {
            && typeof userInfo.lastName == 'string' 
            && typeof userInfo.birthday == 'string' 
            && typeof userInfo.city == 'string'
+           && typeof userInfo.phone == 'string'
 }
 
 export function extractUserInfo(obj: UserInfo): UserInfo {
-    const {name, lastName, birthday, city, church, ...others} = obj;
-    return {name, lastName, birthday, city, church};
+    const {name, lastName, birthday, city, church, phone} = obj;
+    return {name, lastName, birthday, city, church, phone};
 }

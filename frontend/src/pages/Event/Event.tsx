@@ -3,25 +3,34 @@ import { Box, Stack, Typography } from '@mui/material';
 import { useSelector } from 'react-redux';
 import { RegistrationForm } from './RegistrationForm';
 import { selectEvent } from 'redux/ApiQuery';
-import { useLocation, useNavigate } from 'react-router-dom';
+import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { MainButton } from '../../components/Button/Button';
 import { useAppDispatch } from 'redux/store';
 import { selectCurrentEventId, setCurrentEvent } from 'redux/UiSlice';
 import { LongDateFormat, TimeFormat, WeekdayFormat } from 'helpers/DateFormat';
 import { selectIsSubscribed } from 'redux/subscriptions.slice';
 import { SubscribedTextColor } from 'helpers/Constants';
+import { AuthService } from 'services/Auth.service';
+import { EditIconButton } from 'components/EditIconButton';
 
 export function Event() {
     const event = useGetCurrentEvent();
     const [showRegistration, setShowRegistration] = useState(false);
     const isSubscribed = useSelector(selectIsSubscribed(event?._id));
+    const navigate = useNavigate();
+    const isAdmin = AuthService.getInstance().isAdmin();
 
     if (!event) return null;
 
     return (
         <Stack spacing={2}>
             <Box>
-                <Typography variant='h4'>{event.title}</Typography>
+                <Stack direction='row' alignItems='center' sx={{ mb: 1 }}>
+                    <Typography variant='h4'>{event.title}</Typography>
+                    {isAdmin && (
+                        <EditIconButton onClick={() => navigate(`/eventedit/${event._id}`)}/>
+                    )}
+                </Stack>
                 <Typography variant='body2'>
                     Начало {LongDateFormat(event.startDate)} ({WeekdayFormat(event.startDate)}) в{' '}
                     {TimeFormat(event.startDate)}
