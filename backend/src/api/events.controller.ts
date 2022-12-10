@@ -16,8 +16,8 @@ Server.getInstance().regControllers((server: Express) => {
 
     server.post('/api/event', authorized, async (req: Request, res: Response) => {
         const event: EventC = req.body;
-        await EventsRepo.saveEvent(event);
+        const id = await EventsRepo.saveEvent(event);
         WebSocketService.getInstance().sendToAll(WsKey.events);
-        res.send();
+        res.send({id});
     });
 });

@@ -1,61 +1,86 @@
-import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react'
+import { createSelector } from '@reduxjs/toolkit';
+import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
 import { AuthService } from 'services/Auth.service';
-import config from "../config/config";
-import {EventC} from "../shared/event";
+import config from '../config/config';
+import { EventC } from '../shared/event';
+import { RootState } from './store';
 
-export const auth = {token: null};
+export const auth = { token: null };
 
 export const mainApi = createApi({
-    reducerPath: "mainApi",
+    reducerPath: 'mainApi',
     baseQuery: fetchBaseQuery({
         baseUrl: config.serverPort
             ? `${window.location.protocol}//${window.location.hostname}:${config.serverPort}/api/`
             : '/api',
         prepareHeaders: (headers) => {
             const token = AuthService.getInstance().getToken();
-            if (token)
-                headers.set("authorization", token);
+            if (token) headers.set('authorization', token);
             return headers;
-        }
+        },
     }),
-    endpoints: build => ({
-
+    tagTypes: ['events'],
+    endpoints: (build) => ({
         // список мероприятий для отображения
         getEvents: build.query<EventC[], void>({
-            query: () => "events",
+            query: () => 'events',
+            providesTags: ['events'],
+        }),
+
+        // обновляет событие
+        postEvent: build.mutation<string, EventC>({
+            query: (event) => ({
+                url: 'event',
+                method: 'POST',
+                body: event,
+            }),
+            invalidatesTags: ['events'],
+            transformResponse: (resp) => (typeof resp == 'object' ? resp['id'] : null),
         }),
 
         // подписка на участие в мероприятии
         subscribe: build.mutation<void, Record<string, any>>({
             query: (data) => ({
-                url: "subscribe",
+                url: 'subscribe',
                 method: 'POST',
                 body: data,
-            })
+            }),
         }),
 
         // отправка кода на емейл пользователю
         sendCode: build.mutation<void, string>({
             query: (email) => ({
-                url: "code",
+                url: 'code',
                 method: 'POST',
-                body: {email}
-            })
+                body: { email },
+            }),
         }),
 
         // вход в систему, сервер выставляет кук token
-        login: build.mutation<string, {email: string, code: string}>({
-            query: ({email, code}) => ({
-                url: "login",
+        login: build.mutation<string, { email: string; code: string }>({
+            query: ({ email, code }) => ({
+                url: 'login',
                 method: 'POST',
-                body: {email, code}
+                body: { email, code },
             }),
-            transformResponse: (resp) => (typeof resp == "object") ? resp["token"] : null
+            transformResponse: (resp) => (typeof resp == 'object' ? resp['token'] : null),
         }),
-    })
+    }),
 });
 
-export const { useGetEventsQuery, useSubscribeMutation, useSendCodeMutation, useLoginMutation } = mainApi;
+export const {
+    useGetEventsQuery,
+    useSubscribeMutation,
+    useSendCodeMutation,
+    useLoginMutation,
+    usePostEventMutation,
+} = mainApi;
 
-export const selectEvents = (state) => mainApi.endpoints.getEvents.select()(state).data;
-export const selectEvent = (id: string) => (state) => selectEvents(state)?.find(e => e._id == id);
+const getEventsSelector = mainApi.endpoints.getEvents.select();
+const getTime = (date: string) => new Date(date).getTime();
+
+export const selectEvents = createSelector(
+    getEventsSelector,
+    (events) => events.data && [...events.data].sort((a, b) => getTime(a.startDate) - getTime(b.startDate))
+)
+export const selectEvent = (id: string) => (state: RootState) => selectEvents(state)?.find((e) => e._id == id);

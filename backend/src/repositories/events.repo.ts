@@ -19,10 +19,11 @@ export class EventsRepo {
         return null;
     }
 
-    static async saveEvent(event: EventC) {
+    static async saveEvent(event: EventC): Promise<string> {
         const dbEvent = ({...event, _id: new ObjectId(event._id)});
         const {db} = DataBase.getInstance();
-        await db.collection("Events").insertOne(dbEvent);
+        const {upsertedId} = await db.collection("Events").updateOne({_id: dbEvent._id}, {$set: dbEvent}, {upsert: true});
+        return upsertedId?.toString() ?? event._id;
     }
 }
 

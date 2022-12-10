@@ -55,11 +55,6 @@ export const AnswerFieldSettings = React.memo<AnswerFieldSettingsProps>(({ ind, 
                 <IconButton onClick={() => listControl.remove(ind)}>
                     <DeleteIcon />
                 </IconButton>
-                <IconButton
-                    onClick={() => listControl.insert(ind+1, createNewFieldData(formControl))}
-                >
-                    <AddIcon />
-                </IconButton>
                 <IconButton onClick={() => listControl.move(ind, ind + 1)}>
                     <DownIcon />
                 </IconButton>
@@ -68,7 +63,7 @@ export const AnswerFieldSettings = React.memo<AnswerFieldSettingsProps>(({ ind, 
     );
 });
 
-function createNewFieldData(
+export function createNewFieldData(
     formControl: UseFormReturn<EventCEditing>,
 ): RegistrationFieldTypeEditing {
     const fields = formControl.getValues('registrationInfo');
@@ -110,7 +105,7 @@ const TypeField = React.memo<FieldProps>(({ ind }) => {
     const type = formControl.watch(calcName(ind, 'type'));
 
     return (
-        <Stack direction='row' spacing={2}>
+        <Stack direction={{sm: 'row', xs: 'column'}} spacing={2}>
             <MySelect
                 name={calcName(ind, 'type')}
                 label='Тип'
@@ -154,7 +149,7 @@ const ShowModeField = React.memo<FieldProps>(({ ind }) => {
     };
 
     return (
-        <Stack direction='row' spacing={2}>
+        <Stack direction={{sm: 'row', xs: 'column'}} spacing={2}>
             <FormControl>
                 <InputLabel variant='standard'>Показывать</InputLabel>
                 <Select

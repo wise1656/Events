@@ -17,7 +17,7 @@ Server.getInstance().regControllers(server => {
         }
 
         const namedSubscription = await convertFieldIdToNames(subscription);
-        const id = await SubscriptionRepo.SaveSubscription(namedSubscription);
+        const id = await SubscriptionRepo.AddSubscription(namedSubscription);
         res.send(JSON.stringify(id));
     })
 })

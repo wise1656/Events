@@ -3,30 +3,38 @@ import Button from '@mui/material/Button';
 import Stack from '@mui/material/Stack';
 import { MainButton, SecondaryButton } from 'components/Button/Button';
 import { ButtonsContainer } from 'components/Button/ButtonsContainer';
-import { useEffect, memo, Suspense, useState, useContext, createContext, useRef } from 'react';
+import { memo } from 'react';
 import { FormProvider, useFieldArray, useForm, useFormContext, UseFormReturn } from 'react-hook-form';
 import { useSelector } from 'react-redux';
 import { useNavigate, useParams } from 'react-router-dom';
-import { selectEvent } from 'redux/ApiQuery';
+import { selectEvent, usePostEventMutation } from 'redux/ApiQuery';
 import { EventC } from 'shared/event';
-import { AnswerFieldSettings } from './AnswerFieldSettings';
+import { AnswerFieldSettings, createNewFieldData } from './AnswerFieldSettings';
 import { convertToEditing, convertFromEditing, EventCEditing } from './TypeConverters';
+import AddIcon from '@mui/icons-material/Add';
 
 export function EventEdit() {
     const { id } = useParams();
     const event = useSelector(selectEvent(id));
-    if (!event) return null; // ждем пока данные загрузятся
+    if (id == 'new')
+        return <EventEditInner id={null} event={defaultEvent} />
+    if (!event) 
+        return null; // ждем пока данные загрузятся
     return <EventEditInner id={id} event={event}/>;
 }
 
 export function EventEditInner({id, event}: {id: string, event: EventC}) {
     const navigate = useNavigate();
+    const [postEvent] = usePostEventMutation();
     const formControl = useForm<EventCEditing>({ defaultValues: convertToEditing(event) });
     const listControl = useFieldArray({control: formControl.control, name: "registrationInfo", keyName: "key"});
-    
-    const onCancel = () => navigate(`/event/${id}`);
+    const onCancel = () => navigate(id ? `/event/${id}` : '/eventlist');
 
-    const onSubmit = (data: EventCEditing) => console.log(convertFromEditing(data));
+    const onSubmit = async (data: EventCEditing) => {
+        // TODO: сделать обработку ошибок (если нет сети например)
+        const id = await postEvent(convertFromEditing(data)).unwrap();
+        navigate(`/event/${id}`);
+    };
 
     return (
         <FormProvider {...formControl}>
@@ -38,6 +46,7 @@ export function EventEditInner({id, event}: {id: string, event: EventC}) {
                     {listControl.fields.map((f, ind) => (
                         <AnswerFieldSettings key={f.key} ind={ind} listControl={listControl} />
                     ))}
+                    <Button startIcon={<AddIcon />} onClick={() => listControl.append(createNewFieldData(formControl))}>Добавить поле</Button>
                 </Stack>
 
                 <ButtonsContainer sx={{ mt: 3 }}>
@@ -47,6 +56,15 @@ export function EventEditInner({id, event}: {id: string, event: EventC}) {
             </form>
         </FormProvider>
     );
+}
+
+const defaultEvent: EventC  = {
+    _id: null,
+    title: '',
+    description: '',
+    startDate: null,
+    schedule: null,
+    registrationInfo: []
 }
 
 
@@ -75,6 +93,9 @@ const EventInfoFields = memo(() => {
                 type='datetime-local'
                 size='small'
                 required
+                InputLabelProps={{
+                    shrink: true,
+                }}
                 {...formControl.register('startDate')}
             />
             <TextField
@@ -82,6 +103,9 @@ const EventInfoFields = memo(() => {
                 label='Дата и время окончания'
                 type='datetime-local'
                 size='small'
+                InputLabelProps={{
+                    shrink: true,
+                }}
                 {...formControl.register('endDate')}
             />
         </>
