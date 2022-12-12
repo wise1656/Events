@@ -1,8 +1,8 @@
 import {Server} from "../services/server.service";
 import {MailSender} from "../services/mail-sender";
-import {UsersAuthRepo} from "../repositories/usersAuthRepo";
+import {AccessLevel, UsersAuthRepo} from "../repositories/usersAuthRepo";
 import hash from "hash-it";
-import authorized from "../middlewares/authorized";
+import {authorized, authorizedWith, takeUserId} from "../middlewares/authorized";
 
 Server.getInstance().regControllers(server => {
     server.post('/api/code', async (req, res) => {
@@ -27,9 +27,30 @@ Server.getInstance().regControllers(server => {
         res.send(user.token && {token: user.token});
     });
 
-    // контроллер нужен только для проверки залогинен ли пользователь
-    server.post('/api/checklogin', authorized, async (req, res) => {
-        res.send();
+    // проверка уровня доступа пользователя
+    server.get('/api/accesslevel', takeUserId, async (req, res) => {
+        const userId = req["userId"];
+        let accessLevel = AccessLevel.User;
+        if (userId) {
+            const user = await UsersAuthRepo.getUserById(userId);
+            accessLevel = user.accessLevel;
+        }
+        res.send({accessLevel});
+    });
+
+    // делает пользователя админом или забирает эти права
+    server.post('/api/grandaccess', authorizedWith(AccessLevel.SuperAdmin), async (req, res) => {
+        const {email, isGrand} = req.body as {email: string, isGrand: boolean};
+        const user = await UsersAuthRepo.getUserByEmail(email);
+        if (user) {
+            user.accessLevel = isGrand ? AccessLevel.Moderator : AccessLevel.User;
+            await UsersAuthRepo.saveUser(user);
+            res.statusCode = 200;
+            res.send();
+        } else {
+            res.statusCode = 400;
+            res.send();
+        }
     })
 });
 

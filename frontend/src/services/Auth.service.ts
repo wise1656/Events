@@ -15,11 +15,6 @@ export class AuthService {
         return this.email;
     }
 
-    // TODO: сделать реализацию с определением прав на сервере
-    isAdmin() {
-        return true;
-    }
-
     setAuthData(token: string, email: string) {
         this.token = token;
         this.email = email;

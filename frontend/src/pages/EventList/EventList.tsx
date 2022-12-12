@@ -14,7 +14,7 @@ import { SubscribedTextColor } from 'helpers/Constants';
 import { LongDateFormat } from 'helpers/DateFormat';
 import { useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
-import { selectEvents } from 'redux/ApiQuery';
+import { selectEvents, useAccessLevelQuery } from 'redux/ApiQuery';
 import { selectSubscribed } from 'redux/subscriptions.slice';
 import { AuthService } from 'services/Auth.service';
 import AddIcon from '@mui/icons-material/Add';
@@ -26,7 +26,8 @@ export function EventList() {
     const events = useSelector(selectEvents);
     const navigate = useNavigate();
     const subscriptions = useSelector(selectSubscribed);
-    const isAdmin = AuthService.getInstance().isAdmin();
+    const { data: access } = useAccessLevelQuery();
+    const isAdmin = !!access;
 
     const editEvent = (e, id: string) => {
         e.stopPropagation();

@@ -14,6 +14,7 @@ export class Server {
         return Server.instance ?? (Server.instance = new Server());
     }
 
+    // TODO: сделать обработку ошибок, чтобы возвращался 500 ошибка
     static init() {
         const app = express();
 

@@ -19,7 +19,7 @@ export const mainApi = createApi({
             return headers;
         },
     }),
-    tagTypes: ['events'],
+    tagTypes: ['events', 'access'],
     endpoints: (build) => ({
         // список мероприятий для отображения
         getEvents: build.query<EventC[], void>({
@@ -68,7 +68,22 @@ export const mainApi = createApi({
                 body: { email, code },
             }),
             transformResponse: (resp) => (typeof resp == 'object' ? resp['token'] : null),
+            invalidatesTags: ['access']
         }),
+
+        accessLevel: build.query<string, void>({
+            query: () => 'accesslevel',
+            transformResponse: (resp) => (typeof resp == 'object' ? resp['accessLevel'] : null),
+            providesTags: ['access']
+        }),
+
+        grandAccess: build.mutation<void, {email: string, isGrand: boolean}>({
+            query: ({email, isGrand}) => ({
+                url: 'grandaccess',
+                method: 'POST',
+                body: {email, isGrand}
+            })
+        })
     }),
 });
 
@@ -78,7 +93,9 @@ export const {
     useSendCodeMutation,
     useLoginMutation,
     usePostEventMutation,
-    useGetSubscribersQuery
+    useGetSubscribersQuery,
+    useAccessLevelQuery,
+    useGrandAccessMutation
 } = mainApi;
 
 const getEventsSelector = mainApi.endpoints.getEvents.select();

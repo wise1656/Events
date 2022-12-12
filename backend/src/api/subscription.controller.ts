@@ -1,5 +1,7 @@
+import { authorizedWith } from "../middlewares/authorized";
 import { EventsRepo } from "../repositories/events.repo";
 import { SubscriptionRepo } from "../repositories/subscription.repo";
+import { AccessLevel } from "../repositories/usersAuthRepo";
 import { Server } from "../services/server.service";
 
 type Subscription = object & {eventId: string};
@@ -20,7 +22,7 @@ Server.getInstance().regControllers(server => {
         res.send(JSON.stringify(id));
     })
 
-    server.get('/api/subscribers', async (req, res) => {
+    server.get('/api/subscribers', authorizedWith(AccessLevel.Moderator), async (req, res) => {
         const id: string = req.query.id as string;
         const subscribers = await SubscriptionRepo.getSubscriptions(id);
         res.send(subscribers);

@@ -21,6 +21,13 @@ export class UsersAuthRepo {
         return user && {...user, _id: user._id.toString()} as UserAuth
     }
 
+    static async getUserById(id: string): Promise<UserAuth> {
+        const {db} = DataBase.getInstance();
+        const usersAuth = db.collection("UsersAuth");
+        const user = await usersAuth.findOne({_id: new ObjectId(id)});
+        return user && {...user, _id: user._id.toString()} as UserAuth
+    }
+
     static async saveUser(user: UserAuth) {
         const {db} = DataBase.getInstance();
         const dbUser = {...user, _id: new ObjectId(user._id)}
@@ -35,4 +42,11 @@ export interface UserAuth {
     email: string
     authCode: string
     token: string
+    accessLevel: AccessLevel
+}
+
+export enum AccessLevel {
+    User = 0,
+    Moderator = 1,
+    SuperAdmin = 2
 }
