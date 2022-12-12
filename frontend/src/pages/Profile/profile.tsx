@@ -8,6 +8,7 @@ import { UserDataFields } from '../../components/UserDataFields';
 import { MainButton, SecondaryButton } from '../../components/Button/Button';
 import { LoginButton } from '../../components/LoginButton';
 import { EditIconButton } from '../../components/EditIconButton';
+import { AppContainer } from 'components/AppContainer';
 
 export function Profile() {
     const [edit, setEdit] = useState(false);
@@ -26,6 +27,7 @@ export function Profile() {
     };
 
     return (
+        <AppContainer>
         <Box sx={{ p: 2 }}>
             {userInfo && !edit && (
                 <Stack direction='column' alignItems='baseline'>
@@ -34,7 +36,7 @@ export function Profile() {
                             {userInfo.name} {userInfo.lastName}
                         </Typography>
                         {!edit && (
-                            <EditIconButton onClick={() => setEdit(true)}/>
+                            <EditIconButton onClick={() => setEdit(true)} sx={{ml: 1}}/>
                         )}
                     </Stack>
                     <Typography variant='body1'>
@@ -47,6 +49,7 @@ export function Profile() {
             )}
             {edit && <Edit userInfo={userInfo} onSave={onSave} onCancel={() => setEdit(false)} />}
         </Box>
+        </AppContainer>
     );
 }
 

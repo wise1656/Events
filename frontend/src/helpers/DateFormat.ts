@@ -1,5 +1,6 @@
 
 export const LongDateFormat = (date: Date | string) => Format(date, {day: 'numeric', month: 'long', year: 'numeric'});
+export const ShortDateFormat = (date: Date | string) => Format(date, {day: 'numeric', month: 'numeric', year: 'numeric'});
 export const TimeFormat = (date: Date | string) => Format(date, {hour: "numeric", minute: "2-digit"});
 export const WeekdayFormat = (date: Date | string) => Format(date, {weekday: "long"});
 

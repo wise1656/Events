@@ -16,9 +16,14 @@ Server.getInstance().regControllers(server => {
             return;
         }
 
-        const namedSubscription = await convertFieldIdToNames(subscription);
-        const id = await SubscriptionRepo.AddSubscription(namedSubscription);
+        const id = await SubscriptionRepo.addSubscription(subscription);
         res.send(JSON.stringify(id));
+    })
+
+    server.get('/api/subscribers', async (req, res) => {
+        const id: string = req.query.id as string;
+        const subscribers = await SubscriptionRepo.getSubscriptions(id);
+        res.send(subscribers);
     })
 })
 
@@ -39,15 +44,4 @@ function checkErrors(subscription: Subscription): subscription is Subscription {
 // проверка что это плоский объект (все поля простые типы)
 function checkIsFlat(obj: object): boolean {
     return typeof obj == 'object' && !Object.values(obj).some(o => o instanceof Object);
-}
-
-// заменяет называния полей с номеров на имена из описания мероприятия
-// (приходит в формате {1: true, 2: "2"}, возвращаем в формате {"Нужен ночлег": true, "Количество ночей": 2})
-async function convertFieldIdToNames(obj: Subscription): Promise<Subscription> {
-    const event = await EventsRepo.getEvent(obj.eventId);
-    if (!event) return obj;
-    const fieldsMap = Object.fromEntries(event.registrationInfo.map(i => ([i.id, i.name])));
-    const entries = Object.entries(obj);
-    const updatedEntries = entries.map(([key, val]) => ([fieldsMap[key] || key, val]));
-    return Object.fromEntries(updatedEntries);
 }

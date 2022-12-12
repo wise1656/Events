@@ -12,12 +12,7 @@ import { SubscriptionsService } from 'services/Subscriptions.service';
 import { Login } from 'pages/Login/Login';
 import { AuthService } from 'services/Auth.service';
 import { EventEdit } from 'pages/EventEdit/EventEdit';
-
-const AppContainer = styled('div')({
-    maxWidth: 600,
-    padding: '15px',
-    margin: 'auto',
-});
+import { Subscribed } from 'pages/Subscribed/Subscribed';
 
 export default function App() {
     useEventsAutoUpdate();
@@ -25,17 +20,16 @@ export default function App() {
 
     return (
         <BrowserRouter>
-            <AppContainer>
-                <Routes>
-                    {RoutesData.map((r) => (
-                        <Route key={r.url} path={r.url + '/*'} element={<r.component />} />
-                    ))}
-                    <Route path='/' element={<Navigate to='eventlist' />} />
-                    <Route path='/login' element={<Login />} />
-                    <Route path='/eventedit/:id' element={<EventEdit />} />
-                    <Route path='*' element={<h1>404. Not Found!</h1>} />
-                </Routes>
-            </AppContainer>
+            <Routes>
+                {RoutesData.map((r) => (
+                    <Route key={r.url} path={r.url + '/*'} element={<r.component />} />
+                ))}
+                <Route path='/' element={<Navigate to='eventlist' />} />
+                <Route path='/login' element={<Login />} />
+                <Route path='/eventedit/:id' element={<EventEdit />} />
+                <Route path='/subscribers/:id' element={<Subscribed />} />
+                <Route path='*' element={<h1>404. Not Found!</h1>} />
+            </Routes>
             <MainMenu />
         </BrowserRouter>
     );
@@ -56,7 +50,7 @@ function useInitialLoadData() {
     useEffect(() => {
         getEventsFetcher = dispatch(mainApi.endpoints.getEvents.initiate());
         dispatch(setSubscribedEvents(SubscriptionsService.getInstance().getSubscriptions()));
-    }, [])
+    }, []);
 }
 
 AuthService.getInstance().restoreToken();

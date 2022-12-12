@@ -21,7 +21,7 @@ export class UserService {
     }
 }
 
-export type  UserInfo = {
+export type UserInfo = {
     name: string
     lastName: string
     birthday: string
@@ -39,7 +39,16 @@ export function isUserInfo(userInfo: any): userInfo is UserInfo {
            && typeof userInfo.phone == 'string'
 }
 
-export function extractUserInfo(obj: UserInfo): UserInfo {
-    const {name, lastName, birthday, city, church, phone} = obj;
-    return {name, lastName, birthday, city, church, phone};
+export function extractUserInfo(obj: UserInfo): [UserInfo, Record<string, any>] {
+    const {name, lastName, birthday, city, church, phone, ...other} = obj;
+    return [{name, lastName, birthday, city, church, phone}, other];
+}
+
+export const defaultUserInfo: UserInfo = {
+    name: '',
+    lastName: '',
+    birthday: '',
+    city: '',
+    church: null,
+    phone: ''
 }

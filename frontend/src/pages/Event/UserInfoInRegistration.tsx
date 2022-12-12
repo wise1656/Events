@@ -11,14 +11,14 @@ export const UserInfoInRegistration = memo(({ formProcessor }: { formProcessor: 
     const { reset, getValues, register } = formProcessor;
 
     const edit = () => {
-        reset({ ...getValues(), ...userInfo });
+        reset({ ...userInfo, ...getValues() });
         setUserInfo(null);
     };
 
     return userInfo ? (
         <Stack direction='row' alignItems="center">
             {userInfo.name} {userInfo.lastName}
-            <EditIconButton onClick={edit} size={18} />
+            <EditIconButton onClick={edit} size={18} sx={{ml: 1}} />
         </Stack>
     ) : (
         <UserDataFields register={register} />

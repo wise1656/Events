@@ -14,7 +14,7 @@ interface AnswerFieldsProps {
 
 export function AnswerFields({ fields, formProcessor }: AnswerFieldsProps) {
     const [hiddenFields, setHiddenFields] = useState([]);
-    const { register, handleSubmit, reset, control, watch } = formProcessor;
+    const { register, control, watch } = formProcessor;
 
     useLayoutEffect(() => {
         setHiddenFields(calcHiddenFields(fields));

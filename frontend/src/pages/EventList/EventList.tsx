@@ -1,5 +1,6 @@
 ﻿import {
     Divider,
+    IconButton,
     List,
     ListItem,
     ListItemButton,
@@ -18,6 +19,8 @@ import { selectSubscribed } from 'redux/subscriptions.slice';
 import { AuthService } from 'services/Auth.service';
 import AddIcon from '@mui/icons-material/Add';
 import { Fragment } from 'react';
+import PeopleIcon from '@mui/icons-material/People';
+import { AppContainer } from 'components/AppContainer';
 
 export function EventList() {
     const events = useSelector(selectEvents);
@@ -29,7 +32,14 @@ export function EventList() {
         e.stopPropagation();
         navigate(`/eventedit/${id}`);
     };
+
+    const subscribers = (e, id: string) => {
+        e.stopPropagation();
+        navigate(`/subscribers/${id}`);
+    };
+
     return (
+        <AppContainer>
         <Stack alignItems='stretch'>
             <List sx={{ bgcolor: '#f1f1f1', borderRadius: '5px' }} component='nav'>
                 {events?.map((event, i) => (
@@ -49,14 +59,16 @@ export function EventList() {
                                     </Typography>
                                 )}
                                 {isAdmin && (
-                                    <EditIconButton
-                                        onClick={(e) => editEvent(e, event._id)}
-                                        size={18}
-                                    />
+                                    <Stack sx={{ml: 2}}>
+                                        <IconButton onClick={e => subscribers(e, event._id)}>
+                                            <PeopleIcon />
+                                        </IconButton>
+                                        <EditIconButton onClick={(e) => editEvent(e, event._id)} size={18} />
+                                    </Stack>
                                 )}
                             </ListItem>
                         </ListItemButton>
-                        {i != events.length-1 && <Divider variant='inset' component='li' />}
+                        {i != events.length - 1 && <Divider variant='inset' component='li' />}
                     </Fragment>
                 ))}
             </List>
@@ -64,5 +76,6 @@ export function EventList() {
                 Создать мероприятие
             </Button>
         </Stack>
+        </AppContainer>
     );
 }

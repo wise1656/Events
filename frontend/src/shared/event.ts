@@ -30,3 +30,13 @@ export interface RegistrationField {
 }
 
 type RegistrationFieldType = "text" | "checkbox" | string[] /* это для select */;
+
+
+export const defaultEventC: EventC = {
+    _id: null,
+    title: '',
+    description: '',
+    startDate: null,
+    schedule: null,
+    registrationInfo: []
+}

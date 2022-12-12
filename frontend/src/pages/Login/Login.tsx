@@ -1,4 +1,5 @@
 import { Button, CircularProgress, Stack, TextField, Typography } from '@mui/material';
+import { AppContainer } from 'components/AppContainer';
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useLoginMutation, useSendCodeMutation } from 'redux/ApiQuery';
@@ -24,6 +25,7 @@ export function Login() {
     }
 
     return (
+        <AppContainer>
         <Stack>
             <Typography variant='h5'>Вход в систему</Typography>
             <Typography variant='subtitle1' sx={{ mt: 3 }}>
@@ -78,5 +80,6 @@ export function Login() {
                 </>
             )}
         </Stack>
+        </AppContainer>
     );
 }

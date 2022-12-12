@@ -1,12 +1,12 @@
 import config from '../../config';
-import {createTransport, Transporter} from "nodemailer";
-import SMTPTransport from "nodemailer/lib/smtp-transport";
+import { createTransport, Transporter } from 'nodemailer';
+import SMTPTransport from 'nodemailer/lib/smtp-transport';
 
 export class MailSender {
     private static instance: MailSender;
     private _transporter: Transporter<SMTPTransport.SentMessageInfo>;
     static getInstance() {
-        return MailSender.instance ??= new MailSender();
+        return (MailSender.instance ??= new MailSender());
     }
 
     constructor() {
@@ -18,15 +18,18 @@ export class MailSender {
                 user: config.mail.user,
                 pass: config.mail.pass,
             },
-        })
+        });
     }
 
-    async sendMail(mail: {to: string, subject: string, text: string}) {
-        const result = await this._transporter.sendMail({
-            from: {name: 'Церковные события', address: config.mail.user},
-            ...mail,
-
-        })
-        console.log(result)
+    async sendMail(mail: { to: string; subject: string; text: string }) {
+        try {
+            const result = await this._transporter.sendMail({
+                from: { name: 'Церковные события', address: config.mail.user },
+                ...mail,
+            });
+            console.log(result);
+        } catch (e) {
+            console.error(e);
+        }
     }
 }

@@ -47,6 +47,10 @@ export const mainApi = createApi({
             }),
         }),
 
+        getSubscribers: build.query<Record<string, any>[], string>({
+            query: (eventId: string) => `/subscribers?id=${eventId}`,
+        }),
+
         // отправка кода на емейл пользователю
         sendCode: build.mutation<void, string>({
             query: (email) => ({
@@ -74,6 +78,7 @@ export const {
     useSendCodeMutation,
     useLoginMutation,
     usePostEventMutation,
+    useGetSubscribersQuery
 } = mainApi;
 
 const getEventsSelector = mainApi.endpoints.getEvents.select();
