@@ -24,6 +24,8 @@ export class Server {
         app.use(cors({origin: "http://localhost:3000", credentials: true}));
 
         Server.instance.app = app;
+
+        process.on('uncaughtException', err => console.log(err));
     }
 
     listen() {
