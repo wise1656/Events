@@ -73,9 +73,11 @@ export function EventList() {
                     </Fragment>
                 ))}
             </List>
-            <Button onClick={() => navigate('/eventedit/new')} startIcon={<AddIcon />}>
-                Создать мероприятие
-            </Button>
+            {isAdmin && (
+                <Button onClick={() => navigate('/eventedit/new')} startIcon={<AddIcon />}>
+                    Создать мероприятие
+                </Button>
+            )}
         </Stack>
         </AppContainer>
     );

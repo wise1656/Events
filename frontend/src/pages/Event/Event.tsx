@@ -53,7 +53,7 @@ export function Event() {
                         </Typography>
                     )}
                 </Box>
-                <Typography variant='body1'>{event.description}</Typography>
+                <Typography variant='body1' whiteSpace="pre-wrap">{event.description}</Typography>
                 <Stack direction='row'>
                     {isSubscribed ? (
                         <Typography color={SubscribedTextColor}>
