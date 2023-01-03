@@ -21,7 +21,8 @@ export class Server {
         app.use(express.static('../frontend/build'));
         app.use(express.json());
         app.use(cookieParser());
-        app.use(cors({origin: "http://localhost:3000", credentials: true}));
+        if (config.dev)
+            app.use(cors({origin: "http://localhost:3000", credentials: true}));
 
         Server.instance.app = app;
 
@@ -44,6 +45,6 @@ export class Server {
     }
 }
 
-export const setTokenCookie = (res: Response, token: string) => {
+export const setTokenCookie = (res: Response, token: string) => { 
     res.cookie('token', token, {httpOnly: true, maxAge: 365*24*60*60 /* year */});
 }

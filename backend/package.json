@@ -4,9 +4,7 @@
   "description": "",
   "main": "dist/backend/src/app.js",
   "scripts": {
-    "build": "tsc",
-    "build_watch": "tsc --watch",
-    "start_serv": "nodemon --watch \"src/**\" --ext \"ts,json\" --ignore \"src/**/*.test.ts\" --exec \"ts-node src/app.ts\"",
+    "start_serv": "nodemon src/app.ts",
     "start_prod": "ts-node src/app.ts"
   },
   "keywords": [],
