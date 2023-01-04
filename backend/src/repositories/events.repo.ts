@@ -1,29 +1,27 @@
-﻿import {ObjectId} from "bson";
-import {DataBase} from "../services/db";
+﻿import {DataBase} from "../services/db";
 import {EventC} from "../../../frontend/src/shared/event"
+
 
 export class EventsRepo {
     static async getEvents(): Promise<EventC[]> {
-        const {db} = DataBase.getInstance();
-        return await db.collection("Events")
-            .find()
-            .map(e => ({...e, _id: e._id.toString()} as EventC))
-            .toArray()
+        const events = await DataBase.getInstance().events.nedbFind({});
+        return events
     }
 
     static async getEvent(id: string): Promise<EventC> {
-        const {db} = DataBase.getInstance();
-        const event = await db.collection("Events").findOne({_id: new ObjectId(id)});
-        if (event)
-            return {...event, _id: event._id.toString()} as EventC;
-        return null;
+        const event = await DataBase.getInstance().events.nedbFindOne({_id: id});
+        return event;
     }
 
     static async saveEvent(event: EventC): Promise<string> {
-        const dbEvent = ({...event, _id: new ObjectId(event._id)});
-        const {db} = DataBase.getInstance();
-        const {upsertedId} = await db.collection("Events").updateOne({_id: dbEvent._id}, {$set: dbEvent}, {upsert: true});
-        return upsertedId?.toString() ?? event._id;
+        if (!event._id) {
+            delete event._id;
+            const newEvent = await DataBase.getInstance().events.nedbInsert(event);
+            return newEvent._id;
+        }
+
+        DataBase.getInstance().events.nedbUpdate({_id: event._id}, event);
+        return event._id;
     }
 }
 

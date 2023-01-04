@@ -1,5 +1,6 @@
 import {NextFunction, Request, Response} from "express-serve-static-core";
-import {AccessLevel, UserAuth, UsersAuthRepo} from "../repositories/usersAuthRepo";
+import {AccessLevel, UserAuth} from "../modeles/UserAuth";
+import { UsersAuthRepo } from "../repositories/usersAuthRepo";
 
 // проверяет авторизацию пользователя и добавляет его id в запрос для дальнейших обработчиков
 export async function authorized(req: Request, res: Response, next: NextFunction) {

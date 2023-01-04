@@ -1,7 +1,7 @@
 import { authorizedWith } from "../middlewares/authorized";
 import { EventsRepo } from "../repositories/events.repo";
 import { SubscriptionRepo } from "../repositories/subscription.repo";
-import { AccessLevel } from "../repositories/usersAuthRepo";
+import { AccessLevel } from "../modeles/UserAuth";
 import { Server } from "../services/server.service";
 
 type Subscription = object & {eventId: string};

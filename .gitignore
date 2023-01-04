@@ -1,6 +1,7 @@
 ﻿/backend/.idea/
 /backend/node_modules/
 /backend/dist/
+/backend/dbs/
 /backend/config.ts
 /frontend/src/config/config.ts
 /frontend/.idea/

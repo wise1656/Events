@@ -1,52 +1,27 @@
 import {DataBase} from "../services/db";
-import {ObjectId} from "bson";
+import { UserAuth } from "../modeles/UserAuth";
 
 export class UsersAuthRepo {
 
     static async getUserByEmail(email: string): Promise<UserAuth> {
-        const {db} = DataBase.getInstance();
-        const usersAuth = db.collection("UsersAuth");
-        let user = await usersAuth.findOne({email});
+        let user = await DataBase.getInstance().usersAuth.nedbFindOne({email});
         if (!user) {
-            const {insertedId} = await usersAuth.insertOne({email});
-            user = {_id: insertedId, email};
+            user = await DataBase.getInstance().usersAuth.nedbInsert({email} as UserAuth);
         }
-        return {...user, _id: user._id.toString()} as UserAuth;
+        return user;
     }
 
     static async getUserByToken(token: string): Promise<UserAuth> {
-        const {db} = DataBase.getInstance();
-        const usersAuth = db.collection("UsersAuth");
-        const user = await usersAuth.findOne({token});
-        return user && {...user, _id: user._id.toString()} as UserAuth
+        let user = await DataBase.getInstance().usersAuth.nedbFindOne({token});
+        return user;
     }
 
     static async getUserById(id: string): Promise<UserAuth> {
-        const {db} = DataBase.getInstance();
-        const usersAuth = db.collection("UsersAuth");
-        const user = await usersAuth.findOne({_id: new ObjectId(id)});
-        return user && {...user, _id: user._id.toString()} as UserAuth
+        const user = await DataBase.getInstance().usersAuth.nedbFindOne({_id: id});
+        return user;
     }
 
     static async saveUser(user: UserAuth) {
-        const {db} = DataBase.getInstance();
-        const dbUser = {...user, _id: new ObjectId(user._id)}
-        await db.collection("UsersAuth").updateOne({_id: dbUser._id}, {$set: dbUser}, {upsert: true});
+        await DataBase.getInstance().usersAuth.nedbUpdate({_id: user._id}, user);
     }
-
-}
-
-// TODO: сделать время жизни ключа и токена
-export interface UserAuth {
-    _id: string
-    email: string
-    authCode: string
-    token: string
-    accessLevel: AccessLevel
-}
-
-export enum AccessLevel {
-    User = 0,
-    Moderator = 1,
-    SuperAdmin = 2
 }

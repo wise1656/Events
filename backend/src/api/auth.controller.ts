@@ -1,8 +1,9 @@
 import {Server} from "../services/server.service";
 import {MailSender} from "../services/mail-sender";
-import {AccessLevel, UsersAuthRepo} from "../repositories/usersAuthRepo";
+import {UsersAuthRepo} from "../repositories/usersAuthRepo";
 import hash from "hash-it";
-import {authorized, authorizedWith, takeUserId} from "../middlewares/authorized";
+import {authorizedWith, takeUserId} from "../middlewares/authorized";
+import { AccessLevel } from "../modeles/UserAuth";
 
 Server.getInstance().regControllers(server => {
     server.post('/api/code', async (req, res) => {

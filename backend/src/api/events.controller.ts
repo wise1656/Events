@@ -6,7 +6,7 @@ import { Request, Response } from 'express-serve-static-core';
 import { WebSocketService } from '../services/web-socket.service';
 import { EventC } from '../../../frontend/src/shared/event';
 import { WsKey } from '../../../frontend/src/shared/ws-protocol';
-import { AccessLevel } from '../repositories/usersAuthRepo';
+import { AccessLevel } from '../modeles/UserAuth';
 
 Server.getInstance().regControllers((server: Express) => {
     // получает список всех мероприятий
